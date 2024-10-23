@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .input-group {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        .arrow {
+            font-size: 24px;
+            margin: 10px;
+            color: #666;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+        }
+        .formula {
+            font-family: monospace;
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 3px;
+        }
+        .animation {
+            transition: all 0.3s ease;
+        }
+        .network-viz {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .node {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 10px;
+        }
+        .input-node {
+            background: #bbdefb;
+        }
+        .output-node {
+            background: #c8e6c9;
+        }
+        .edge {
+            height: 2px;
+            background: #999;
+            flex-grow: 1;
+            position: relative;
+        }
+        .weight-label {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>单层感知器前向传播演示</h2>
+        
+        <div class="input-group">
+            <h3>输入值 (x₁, x₂)</h3>
+            <input type="number" id="x1" value="1" step="0.1">
+            <input type="number" id="x2" value="1" step="0.1">
+        </div>
+
+        <div class="input-group">
+            <h3>权重 (w₁, w₂) 和偏置 (b)</h3>
+            <input type="number" id="w1" value="0.5" step="0.1">
+            <input type="number" id="w2" value="0.5" step="0.1">
+            <input type="number" id="b" value="0" step="0.1">
+        </div>
+
+        <div class="network-viz">
+            <div class="node input-node" id="input1">x₁</div>
+            <div class="edge">
+                <div class="weight-label" id="weight1">w₁</div>
+            </div>
+            <div class="node output-node" id="output">y</div>
+            <div class="edge">
+                <div class="weight-label" id="weight2">w₂</div>
+            </div>
+            <div class="node input-node" id="input2">x₂</div>
+        </div>
+
+        <div class="result">
+            <h3>计算过程:</h3>
+            <div class="formula" id="linearFormula">线性组合: z = w₁x₁ + w₂x₂ + b = 0</div>
+            <div class="formula" id="activationFormula">激活函数: y = φ(z) = 0</div>
+        </div>
+    </div>
+
+    <script>
+        function updateCalculation() {
+            const x1 = parseFloat(document.getElementById('x1').value);
+            const x2 = parseFloat(document.getElementById('x2').value);
+            const w1 = parseFloat(document.getElementById('w1').value);
+            const w2 = parseFloat(document.getElementById('w2').value);
+            const b = parseFloat(document.getElementById('b').value);
+
+            // 更新可视化
+            document.getElementById('input1').textContent = `x₁: ${x1}`;
+            document.getElementById('input2').textContent = `x₂: ${x2}`;
+            document.getElementById('weight1').textContent = `w₁: ${w1}`;
+            document.getElementById('weight2').textContent = `w₂: ${w2}`;
+
+            // 计算线性组合
+            const z = w1 * x1 + w2 * x2 + b;
+            document.getElementById('linearFormula').textContent = 
+                `线性组合: z = ${w1}×${x1} + ${w2}×${x2} + ${b} = ${z.toFixed(2)}`;
+
+            // 计算激活函数输出（使用阶跃函数）
+            const y = z >= 0 ? 1 : 0;
+            document.getElementById('activationFormula').textContent = 
+                `激活函数: y = φ(${z.toFixed(2)}) = ${y}`;
+            
+            document.getElementById('output').textContent = `y: ${y}`;
+            document.getElementById('output').style.background = 
+                y === 1 ? '#81c784' : '#e57373';
+        }
+
+        // 添加事件监听器
+        document.getElementById('x1').addEventListener('input', updateCalculation);
+        document.getElementById('x2').addEventListener('input', updateCalculation);
+        document.getElementById('w1').addEventListener('input', updateCalculation);
+        document.getElementById('w2').addEventListener('input', updateCalculation);
+        document.getElementById('b').addEventListener('input', updateCalculation);
+
+        // 初始计算
+        updateCalculation();
+    </script>
+</body>
+</html>
